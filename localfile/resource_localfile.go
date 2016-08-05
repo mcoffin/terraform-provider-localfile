@@ -62,17 +62,14 @@ func resourceLocalFileDelete(rd *schema.ResourceData, _ interface{}) error {
 func resourceLocalFileRead(rd *schema.ResourceData, _ interface{}) error {
 	config := newLocalFileCfg(rd)
 
-  x, err := ioutil.ReadFile(config.Path)
+  content, err := ioutil.ReadFile(config.Path)
   if err != nil {
     return err
   }
 
-  rd.SetId(config.Path)
-  rd.Set("content", string(x))
+  rd.Set("content", string(content))
 
   return nil
-
-
 }
 
 func resourceLocalFileExists(rd *schema.ResourceData, _ interface{}) (bool, error) {
