@@ -3,6 +3,7 @@ package localfile
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"os"
+  "io/ioutil"
 )
 
 func resourceLocalFile() *schema.Resource {
@@ -61,9 +62,17 @@ func resourceLocalFileDelete(rd *schema.ResourceData, _ interface{}) error {
 func resourceLocalFileRead(rd *schema.ResourceData, _ interface{}) error {
 	config := newLocalFileCfg(rd)
 
-	f, err := os.Open(config.Path)
-	defer f.Close()
-	return err
+  x, err := ioutil.ReadFile(config.Path)
+  if err != nil {
+    return err
+  }
+
+  rd.SetId(config.Path)
+  rd.Set("content", string(x))
+
+  return nil
+
+
 }
 
 func resourceLocalFileExists(rd *schema.ResourceData, _ interface{}) (bool, error) {
