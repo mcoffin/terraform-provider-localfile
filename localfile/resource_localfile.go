@@ -3,9 +3,9 @@ package localfile
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"os"
-  "io/ioutil"
-  "path/filepath"
-  "fmt"
+	"io/ioutil"
+	"path/filepath"
+	"fmt"
 )
 
 func resourceLocalFile() *schema.Resource {
@@ -44,13 +44,12 @@ func newLocalFileCfg(rd *schema.ResourceData) localfileCfg {
 
 func resourceLocalFileCreate(rd *schema.ResourceData, _ interface{}) error {
 	config := newLocalFileCfg(rd)
-  basedir := filepath.Dir(config.Path)
+	basedir := filepath.Dir(config.Path)
 
-  fmt.Println(basedir, "foo" )
-  err := os.MkdirAll(basedir, 0755)
-  if err != nil {
-    return err
-  }
+	err := os.MkdirAll(basedir, 0755)
+	if err != nil {
+		return err
+	}
 
 	f, err := os.Create(config.Path)
 	if err != nil {
@@ -72,14 +71,14 @@ func resourceLocalFileDelete(rd *schema.ResourceData, _ interface{}) error {
 func resourceLocalFileRead(rd *schema.ResourceData, _ interface{}) error {
 	config := newLocalFileCfg(rd)
 
-  content, err := ioutil.ReadFile(config.Path)
-  if err != nil {
-    return err
-  }
+	content, err := ioutil.ReadFile(config.Path)
+	if err != nil {
+		return err
+	}
 
-  rd.Set("content", string(content))
+	rd.Set("content", string(content))
 
-  return nil
+	return nil
 }
 
 func resourceLocalFileExists(rd *schema.ResourceData, _ interface{}) (bool, error) {
